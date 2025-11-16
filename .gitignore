@@ -1,0 +1,59 @@
+# ----------------------------------------------------
+# 👈 [추가] Flutter/Dart 필수 규칙
+#
+# 빌드 결과물 (가장 중요!)
+/build/
+
+# Dart 임시 파일
+/.dart_tool/
+
+# IDE 설정
+/.idea/
+/.vscode/
+
+# 설치 파일
+*.apk
+*.aab
+*.ipa
+*.dSYM
+# ----------------------------------------------------
+
+
+### IntelliJ IDEA ###
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
+
+# ----------------------------------------------------
+# 👈 [추가] API 키 파일 (이 규칙은 잘 되어있습니다)
+# ----------------------------------------------------
+# Android API 키 파일
+/android/local.properties
+
+# iOS API 키 파일
+/ios/Flutter/Secrets.xcconfig
