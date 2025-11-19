@@ -1,57 +1,55 @@
-// 👈 1. 파일 맨 위에 이 3줄을 추가합니다. (import)
 import java.util.Properties
-import java.nio.charset.StandardCharsets
-
-// 👈 2. plugins { ... } 블록 *전에* 이 코드를 추가합니다.
-// local.properties 파일에서 API 키를 읽어옵니다.
-val localProperties = Properties()
-val localPropertiesFile = rootProject.file("local.properties")
-if (localPropertiesFile.exists()) {
-    localPropertiesFile.reader(StandardCharsets.UTF_8).use { reader ->
-        localProperties.load(reader)
-    }
-}
+import java.io.FileReader
 
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
 
 android {
     namespace = "com.example.sw_flutter"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = flutter.compileSdkVersion.toInt()
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    sourceSets {
+        getByName("main") {
+            java.srcDirs(listOf("src/main/kotlin"))
+        }
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.sw_flutter"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
+
+        // 👇 [중요] 여기를 21로 변경했습니다! (기존: flutter.minSdkVersion)
         minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
+
+        targetSdk = flutter.targetSdkVersion.toInt()
+        versionCode = flutter.versionCode.toInt()
         versionName = flutter.versionName
 
-        // 👈 3. defaultConfig { ... } 블록 안에 이 한 줄을 추가합니다.
-        // 읽어온 API 키를 'mapsApiKey'라는 변수에 할당합니다.
-        manifestPlaceholders["mapsApiKey"] = localProperties.getProperty("maps.apiKey")
+        // 👇 .env 파일 로드 로직 (잘 작성하셨습니다!)
+        val envFile = rootProject.file("../.env")
+        val envProperties = Properties()
+        if (envFile.exists()) {
+            envProperties.load(FileReader(envFile))
+        }
+
+        manifestPlaceholders["GOOGLE_MAPS_API_KEY"] =
+            envProperties.getProperty("GOOGLE_MAPS_API_KEY", "")
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("debug")
         }
     }
